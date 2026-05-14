@@ -96,8 +96,7 @@ jobs:
         run: npx playwright install --with-deps chrome
 
       - name: Run Playwright UI tests
-        # Find all spec files except those in tests/api and pass them to Playwright
-        run: npx playwright test $(find tests -name "*.spec.ts" -not -path "tests/api/*")
+        run: npx playwright test tests/ui/
         env:
           TEST_ENV: ${{ inputs.environment || 'staging' }}
 

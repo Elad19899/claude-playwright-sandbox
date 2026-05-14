@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
+import { LoginPage } from '../../pages/LoginPage';
 
 test.describe('Authentication', () => {
   test('logs in successfully with valid credentials', async ({ page }) => {

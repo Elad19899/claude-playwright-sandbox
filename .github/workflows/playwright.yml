@@ -60,16 +60,12 @@ jobs:
         env:
           TEST_ENV: ${{ inputs.environment || 'staging' }}
 
-      - name: Generate Allure report
-        if: ${{ !cancelled() }}
-        run: npx allure generate ./allure-results --clean -o ./allure-report
-
-      - name: Upload Allure HTML report
+      - name: Upload Allure raw results
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: allure-report-api
-          path: allure-report/
+          name: allure-results-api
+          path: allure-results/
           retention-days: 30
 
   ui-tests:
@@ -100,14 +96,10 @@ jobs:
         run: npx playwright install --with-deps chrome
 
       - name: Run Playwright UI tests
-        # We ignore the api directory for this job
-        run: npx playwright test --ignore="tests/api/**"
+        # Find all spec files except those in tests/api and pass them to Playwright
+        run: npx playwright test $(find tests -name "*.spec.ts" -not -path "tests/api/*")
         env:
           TEST_ENV: ${{ inputs.environment || 'staging' }}
-
-      - name: Generate Allure report
-        if: ${{ !cancelled() }}
-        run: npx allure generate ./allure-results --clean -o ./allure-report
 
       - name: Upload Playwright HTML report
         if: ${{ !cancelled() }}
@@ -117,10 +109,53 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-      - name: Upload Allure HTML report
+      - name: Upload Allure raw results
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: allure-report-ui
+          name: allure-results-ui
+          path: allure-results/
+          retention-days: 30
+
+  generate-allure-report:
+    name: Generate Combined Allure Report
+    if: ${{ always() }}
+    needs: [api-tests, ui-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java (required by Allure CLI)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install Allure Commandline
+        run: npm install -g allure-commandline --save-dev
+
+      - name: Download API Test Results
+        if: ${{ needs.api-tests.result != 'skipped' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results-api
+          path: allure-results
+        continue-on-error: true
+
+      - name: Download UI Test Results
+        if: ${{ needs.ui-tests.result != 'skipped' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results-ui
+          path: allure-results
+        continue-on-error: true
+
+      - name: Generate Allure Report
+        run: npx allure generate ./allure-results --clean -o ./allure-report
+
+      - name: Upload Combined Allure HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-html-report
           path: allure-report/
           retention-days: 30

@@ -1,8 +1,8 @@
-import { Locator, Page } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { Locator, Page } from "@playwright/test";
+import { BasePage } from "./BasePage";
 
 export class LoginPage extends BasePage {
-  static readonly URL = 'https://the-internet.herokuapp.com/login';
+  static readonly URL = "https://the-internet.herokuapp.com/login";
 
   readonly usernameInput: Locator;
   readonly passwordInput: Locator;
@@ -11,10 +11,10 @@ export class LoginPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.usernameInput = page.getByLabel('Username');
-    this.passwordInput = page.getByLabel('Password');
-    this.loginButton = page.getByRole('button', { name: 'Login' });
-    this.flashMessage = page.locator('#flash');
+    this.usernameInput = page.getByLabel("Username");
+    this.passwordInput = page.getByLabel("Password");
+    this.loginButton = page.getByRole("button", { name: "Login" });
+    this.flashMessage = page.locator("#flash");
   }
 
   async open(): Promise<void> {

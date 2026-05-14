@@ -6,7 +6,7 @@ An AI-driven test automation framework that pairs **Playwright + TypeScript** wi
 
 ## Project Overview
 
-This repository is a modern automation infrastructure targeting [The Internet HerokuApp](https://the-internet.herokuapp.com/) — a well-known sandbox for practicing UI and API automation against realistic web scenarios (login flows, dynamic content, basic auth, alerts, frames, file uploads, and more).
+This repository is a modern automation infrastructure targeting [The Internet HerokuApp](https://the-internet.herokuapp.com/login) — a well-known sandbox for practicing UI and API automation against realistic web scenarios (login flows, dynamic content, basic auth, alerts, frames, file uploads, and more).
 
 It demonstrates how an AI coding agent (Claude Code) can author, maintain, and extend a production-grade end-to-end suite alongside a human engineer, while keeping the codebase clean, typed, and resilient.
 

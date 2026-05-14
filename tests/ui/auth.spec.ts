@@ -11,5 +11,7 @@ test.describe('Authentication', () => {
     await expect(loginPage.flashMessage).toBeVisible();
     await expect(loginPage.flashMessage).toContainText('You logged into a secure area!');
     await expect(page).toHaveURL(/\/secure$/);
+
+    await page.close();
   });
 });

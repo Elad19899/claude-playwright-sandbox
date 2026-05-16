@@ -7,6 +7,10 @@ import { expect, test } from '@playwright/test';
 const BASIC_AUTH_URL = 'https://the-internet.herokuapp.com/basic_auth';
 
 test.describe('API: Basic Auth', () => {
+  /**
+   * Verifies that requests without authentication headers are correctly rejected
+   * with a 401 status and a WWW-Authenticate challenge.
+   */
   test('rejects unauthenticated requests with 401', async ({ request }) => {
     const response = await request.get(BASIC_AUTH_URL);
 
@@ -14,6 +18,10 @@ test.describe('API: Basic Auth', () => {
     expect(response.headers()['www-authenticate']).toMatch(/Basic/i);
   });
 
+  /**
+   * Verifies that valid basic auth credentials successfully authenticate the user
+   * and return the designated success message.
+   */
   test('accepts valid Basic credentials and returns success body', async ({ playwright }) => {
     const context = await playwright.request.newContext({
       httpCredentials: { username: 'admin', password: 'admin' },

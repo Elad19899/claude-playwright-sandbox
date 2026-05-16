@@ -32,17 +32,18 @@ Use it as:
 
 ## Architecture
 
-The framework follows a classic **Page Object Model (POM)** with an inheritance-based design that scales as the suite grows. UI tests live under `tests/`, and pure API tests are isolated under `tests/api/` and use Playwright's `request` fixture (no browser is launched for those).
+The framework follows a classic **Page Object Model (POM)** with an inheritance-based design that scales as the suite grows. UI tests live under `tests/ui`, and pure API tests are isolated under `tests/api/` and use Playwright's `request` fixture (no browser is launched for those).
 
 ```text
 .
 ├── pages/
-│   ├── BasePage.ts          # Shared navigation/wait helpers; every page extends this
-│   └── LoginPage.ts         # Locators + actions for /login
+│   ├── BasePage.ts          # Base class providing common framework functionalities like navigation and waiting.
+│   └── LoginPage.ts         # Encapsulates interactions and locators specific to the Login page.
 ├── tests/
-│   ├── auth.spec.ts         # UI spec: login flow via the LoginPage object
+│   ├── ui/
+│   │   └── auth.spec.ts        # UI tests asserting the login flows and authentication behavior.
 │   └── api/
-│       └── basic-auth.spec.ts  # API spec: HTTP Basic Auth via request fixture
+│       └── basic-auth.spec.ts  # API tests asserting HTTP Basic Auth mechanisms using the request fixture.
 ├── playwright.config.ts     # Single Google Chrome project, Allure reporter, slowMo locally
 ├── tsconfig.json            # Strict TypeScript
 └── .github/workflows/
